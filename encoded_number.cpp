@@ -35,7 +35,7 @@ EncodedNumber EncodedNumber::encode(PaillierPublicKey* public_key, float scalar,
     if (precision == 0) {
         int bin_flt_exponent;
         frexp(scalar, &bin_flt_exponent);
-        int bin_lsb_exponent = bin_flt_exponent - FLT_MANT_DIG;
+        int bin_lsb_exponent = bin_flt_exponent - DBL_MANT_DIG;
         prec_exponent = floor(bin_lsb_exponent / LOG2_BASE);
     } else {
         prec_exponent = (int)floorf(logb(precision, BASE));
