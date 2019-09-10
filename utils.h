@@ -6,9 +6,9 @@
 #define __utils__
 
 typedef struct {
-    int r;
-    int s;
-    int t;
+    long r;
+    long s;
+    long t;
 } ext_gcd;
 
 typedef struct {
@@ -16,11 +16,11 @@ typedef struct {
 } keypair;
 
 unsigned long powmod(unsigned long base, unsigned long exp, unsigned long p);
-ext_gcd egcd(int a, int b);
-int invert(int a, int b);
-bool miller_rabin(int n, int k);
-bool is_prime(int n, int mr_rounds = 25);
-int getprimeover(int N);
-keypair generate_paillier_keypair(int n_length);
+ext_gcd egcd(long a, long b);
+long invert(long a, long b);
+bool miller_rabin(long n, long k);
+bool is_prime(long n, long mr_rounds = 25);
+long getprimeover(long N);
+keypair generate_paillier_keypair(long n_length);
 
 #endif

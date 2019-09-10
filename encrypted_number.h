@@ -6,34 +6,34 @@
 class EncryptedNumber {
    public:
     
-    EncryptedNumber(PaillierPublicKey* public_key, int ciphertext, int exponent = 0);
+    EncryptedNumber(PaillierPublicKey* public_key, long ciphertext, long exponent = 0);
 
     EncryptedNumber operator+(EncryptedNumber& other);
     EncryptedNumber operator+(EncodedNumber& other);
-    EncryptedNumber operator+(int other);
+    EncryptedNumber operator+(long other);
     EncryptedNumber operator+(float other);
 
     EncryptedNumber operator*(EncodedNumber& other);
-    EncryptedNumber operator*(int other);
+    EncryptedNumber operator*(long other);
     EncryptedNumber operator*(float other);
 
-    EncryptedNumber operator/(int scalar);
+    EncryptedNumber operator/(long scalar);
     EncryptedNumber operator/(float scalar);
 
     EncryptedNumber _add_encoded(EncodedNumber& encoded);
     EncryptedNumber _add_encrypted(EncryptedNumber& other);
-    EncryptedNumber _add_scalar(int scalar);
+    EncryptedNumber _add_scalar(long scalar);
     EncryptedNumber _add_scalar(float scalar);
-    int _raw_add(int e_a, int e_b);
-    int _raw_mult(int plaintext);
-    int ciphertext(bool be_secure = true);
-    EncryptedNumber decrease_exponent_to(int new_exp);
+    long _raw_add(long e_a, long e_b);
+    long _raw_mult(long plaintext);
+    long ciphertext(bool be_secure = true);
+    EncryptedNumber decrease_exponent_to(long new_exp);
     void obfuscate();
     PaillierPublicKey* public_key;
-    int exponent;
+    long exponent;
 
     private:
-        int _ciphertext;
+        long _ciphertext;
         bool _is_obfuscated;
 };
 

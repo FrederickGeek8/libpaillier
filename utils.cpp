@@ -14,7 +14,7 @@ unsigned long powmod(unsigned long base, unsigned long exp, unsigned long p) {
     return result;
 }
 
-ext_gcd egcd(int a, int b) {
+ext_gcd egcd(long a, long b) {
     if (a == 0) {
         ext_gcd ret = {b, 0, 1};
         return ret;
@@ -26,7 +26,7 @@ ext_gcd egcd(int a, int b) {
     return ret;
 }
 
-int invert(int a, int b) {
+long invert(long a, long b) {
     ext_gcd res = egcd(a, b);
     if (res.r != 1) {
         throw std::runtime_error(std::string("No inverse exists."));
@@ -35,13 +35,13 @@ int invert(int a, int b) {
     return res.s % b;
 }
 
-bool miller_rabin(int n, int k) {
+bool miller_rabin(long n, long k) {
     if (n <= 3) {
         throw std::runtime_error(std::string("Number too low."));
     }
 
-    int d = n - 1;
-    int r = 0;
+    long d = n - 1;
+    long r = 0;
     while (d % 2 == 0) {
         d /= 2;
         r += 1;
@@ -51,12 +51,12 @@ bool miller_rabin(int n, int k) {
         throw std::runtime_error(std::string("MR error."));
     }
 
-    int i;
-    int j;
-    int min = 2;
-    int max = n - 2 - min + 1;
+    long i;
+    long j;
+    long min = 2;
+    long max = n - 2 - min + 1;
     for (i = 0; i < k; i++) {
-        unsigned int a = rand() % max + min;
+        unsigned long a = rand() % max + min;
         unsigned long x = powmod(a, d, n);
 
         if (x == 1 || x == n - 1) {
@@ -80,19 +80,19 @@ bool miller_rabin(int n, int k) {
     return true;
 }
 
-int getprimeover(int N) {
-    unsigned int min = pow(2, N - 1);
-    unsigned int max = pow(2, N) - min + 1;
-    unsigned int n = (rand() % max + min) | 1;
+long getprimeover(long N) {
+    unsigned long min = pow(2, N - 1);
+    unsigned long max = pow(2, N) - min + 1;
+    unsigned long n = (rand() % max + min) | 1;
     while (!is_prime(n)) {
         n += 2;
     }
     return n;
 }
 
-keypair generate_paillier_keypair(int n_length) {
+keypair generate_paillier_keypair(long n_length) {
     long p = 0, q = 0, n = 0;
-    int n_len = 0;
+    long n_len = 0;
     while (n_len != n_length) {
         p = getprimeover(n_length / 2);
         q = p;
@@ -109,7 +109,7 @@ keypair generate_paillier_keypair(int n_length) {
     return m_keypair;
 }
 
-int first_primes[] = {
+long first_primes[] = {
     2,     3,     5,     7,     11,    13,    17,    19,    23,    29,    31,
     37,    41,    43,    47,    53,    59,    61,    67,    71,    73,    79,
     83,    89,    97,    101,   103,   107,   109,   113,   127,   131,   137,
@@ -298,9 +298,9 @@ int first_primes[] = {
     17737, 17747, 17749, 17761, 17783, 17789, 17791, 17807, 17827, 17837, 17839,
     17851, 17863};
 
-bool is_prime(int n, int mr_rounds) {
+bool is_prime(long n, long mr_rounds) {
     if (n <= first_primes[2047]) {
-        int i;
+        long i;
         for (i = 0; i < 2048; i++) {
             if (first_primes[i] == n) {
                 return true;
@@ -310,7 +310,7 @@ bool is_prime(int n, int mr_rounds) {
         return false;
     }
 
-    int i;
+    long i;
     for (i = 0; i < 2048; i++) {
         if (n % first_primes[i] == 0) {
             return false;

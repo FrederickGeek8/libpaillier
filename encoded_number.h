@@ -14,20 +14,20 @@
 class EncodedNumber {
    public:
     
-    EncodedNumber(PaillierPublicKey* public_key, int encoding, int exponent);
-    static EncodedNumber encode(PaillierPublicKey* public_key, int scalar,
+    EncodedNumber(PaillierPublicKey* public_key, long encoding, long exponent);
+    static EncodedNumber encode(PaillierPublicKey* public_key, long scalar,
                                 float precision = 0,
-                                int max_exponent = 0);
+                                long max_exponent = 0);
     static EncodedNumber encode(PaillierPublicKey* public_key, float scalar,
                                 float precision = 0,
-                                int max_exponent = 0);
-    int decode();
-    EncodedNumber decrease_exponent_to(int new_exp);
+                                long max_exponent = 0);
+    long decode();
+    EncodedNumber decrease_exponent_to(long new_exp);
     PaillierPublicKey* public_key;
-    int encoding;
-    int exponent;
+    long encoding;
+    long exponent;
 };
 
-float logb(float x, int base);
+float logb(float x, long base);
 
 #endif
