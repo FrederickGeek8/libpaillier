@@ -1,6 +1,6 @@
 #include "encrypted_number.h"
 
-EncryptedNumber::EncryptedNumber(PaillierPublicKey* public_key, long ciphertext,
+EncryptedNumber::EncryptedNumber(PaillierPublicKey* public_key, mpz_class ciphertext,
                                  long exponent) {
     this->public_key = public_key;
     this->_ciphertext = ciphertext;
@@ -27,7 +27,7 @@ EncryptedNumber EncryptedNumber::operator+(float other) {
 
 // Multiplying
 EncryptedNumber EncryptedNumber::operator*(EncodedNumber& other) {
-    long product = this->_raw_mult(other.encoding);
+    mpz_class product = this->_raw_mult(other.encoding);
     long exponent = this->exponent + other.exponent;
     return EncryptedNumber(this->public_key, product, exponent);
 }
@@ -51,7 +51,7 @@ EncryptedNumber EncryptedNumber::operator/(float scalar) {
     return this->operator*(1 / scalar);
 }
 
-long EncryptedNumber::ciphertext(bool be_secure) {
+mpz_class EncryptedNumber::ciphertext(bool be_secure) {
     if (be_secure && this->_is_obfuscated) {
         this->obfuscate();
     }
@@ -73,7 +73,7 @@ EncryptedNumber EncryptedNumber::decrease_exponent_to(long new_exp) {
 
 void EncryptedNumber::obfuscate() {
     long r = this->public_key->get_random_lt_n();
-    long r_pow_n = powmod(r, this->public_key->n, this->public_key->nsquare);
+    mpz_class r_pow_n = powmod(r, this->public_key->n, this->public_key->nsquare);
     this->_ciphertext = this->_ciphertext * r_pow_n % this->public_key->nsquare;
     this->_is_obfuscated = true;
 }
@@ -92,7 +92,7 @@ EncryptedNumber EncryptedNumber::_add_encoded(EncodedNumber& encoded) {
     }
 
     long encrypted_scalar = a.public_key->raw_encrypt(b.encoding, 1);
-    long sum_ciphertext = a._raw_add(a.ciphertext(false), encrypted_scalar);
+    mpz_class sum_ciphertext = a._raw_add(a.ciphertext(false), encrypted_scalar);
 
     return EncryptedNumber(a.public_key, sum_ciphertext, a.exponent);
 }
@@ -110,7 +110,7 @@ EncryptedNumber EncryptedNumber::_add_encrypted(EncryptedNumber& other) {
         b = b.decrease_exponent_to(a.exponent);
     }
 
-    long sum_ciphertext = a._raw_add(a.ciphertext(false), b.ciphertext(false));
+    mpz_class sum_ciphertext = a._raw_add(a.ciphertext(false), b.ciphertext(false));
 
     return EncryptedNumber(a.public_key, sum_ciphertext, a.exponent);
 }
@@ -124,18 +124,18 @@ EncryptedNumber EncryptedNumber::_add_scalar(float scalar) {
     return this->_add_encoded(encoded);
 }
 
-long EncryptedNumber::_raw_add(long e_a, long e_b) {
+mpz_class EncryptedNumber::_raw_add(mpz_class e_a, mpz_class e_b) {
     return e_a * e_b % this->public_key->nsquare;
 }
 
-long EncryptedNumber::_raw_mult(long plaintext) {
+mpz_class EncryptedNumber::_raw_mult(mpz_class plaintext) {
     if (plaintext < 0 || plaintext >= this->public_key->max_int) {
         throw std::runtime_error(std::string("Scalar out of bounds."));
     }
 
     if (this->public_key->n - this->public_key->max_int <= plaintext) {
-        long neg_c = invert(this->ciphertext(false), this->public_key->nsquare);
-        long neg_scalar = this->public_key->n - plaintext;
+        mpz_class neg_c = invert(this->ciphertext(false), this->public_key->nsquare);
+        mpz_class neg_scalar = this->public_key->n - plaintext;
         return powmod(neg_c, neg_scalar, this->public_key->nsquare);
     }
 

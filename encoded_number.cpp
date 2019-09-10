@@ -1,6 +1,6 @@
 #include "encoded_number.h"
 
-EncodedNumber::EncodedNumber(PaillierPublicKey* public_key, long encoding,
+EncodedNumber::EncodedNumber(PaillierPublicKey* public_key, mpz_class encoding,
                              long exponent) {
     this->public_key = public_key;
     this->encoding = encoding;
@@ -54,8 +54,8 @@ EncodedNumber EncodedNumber::encode(PaillierPublicKey* public_key, float scalar,
     return EncodedNumber(public_key, int_rep % public_key->n, exponent);
 }
 
-long EncodedNumber::decode() {
-    long mantissa = 0;
+mpz_class EncodedNumber::decode() {
+    mpz_class mantissa = 0;
     if (this->encoding >= this->public_key->n) {
         throw std::runtime_error(std::string("Attempted to decode corrupted number."));
     } else if (this->encoding <= this->public_key->max_int) {
@@ -75,7 +75,7 @@ EncodedNumber EncodedNumber::decrease_exponent_to(long new_exp) {
     }
 
     long factor = pow(BASE, this->exponent - new_exp);
-    long new_enc = this->encoding * factor % this->public_key->n;
+    mpz_class new_enc = this->encoding * factor % this->public_key->n;
 
     return EncodedNumber(this->public_key, new_enc, new_exp);
 }

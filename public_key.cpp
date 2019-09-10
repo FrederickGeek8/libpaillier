@@ -11,11 +11,11 @@ bool PaillierPublicKey::operator==(const PaillierPublicKey& other) {
     return this->n == other.n;
 }
 
-long PaillierPublicKey::raw_encrypt(long plaintext, long r_value) {
-    long nude_ciphertext;
+mpz_class PaillierPublicKey::raw_encrypt(mpz_class plaintext, long r_value) {
+    mpz_class nude_ciphertext;
     if (this->n - this->max_int <= plaintext && plaintext < this->n) {
-        long neg_plaintext = this->n - plaintext;
-        long neg_ciphertext = (this->n * neg_plaintext + 1) % this->nsquare;
+        mpz_class neg_plaintext = this->n - plaintext;
+        mpz_class neg_ciphertext = (this->n * neg_plaintext + 1) % this->nsquare;
         nude_ciphertext = invert(neg_ciphertext, this->nsquare);
     } else {
         nude_ciphertext = (this->n * plaintext + 1) % this->nsquare;
@@ -28,7 +28,7 @@ long PaillierPublicKey::raw_encrypt(long plaintext, long r_value) {
         r = r_value;
     }
 
-    long obfuscator = powmod(r, this->n, this->nsquare);
+    mpz_class obfuscator = powmod(r, this->n, this->nsquare);
     printf("r: %lu, o: %lu, n: %lu, n2: %lu\n", r, obfuscator, this->n, this->nsquare);
 
     return (nude_ciphertext * obfuscator) % this->nsquare;
@@ -58,7 +58,7 @@ EncryptedNumber PaillierPublicKey::encrypt_encoded(EncodedNumber encoding, long 
         obfuscator = r_value;
     }
 
-    long ciphertext = this->raw_encrypt(encoding.encoding, obfuscator);
+    mpz_class ciphertext = this->raw_encrypt(encoding.encoding, obfuscator);
     EncryptedNumber encrypted_number = EncryptedNumber(this, ciphertext, encoding.encoding);
 
     if (r_value == 0) {

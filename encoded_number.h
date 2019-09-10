@@ -14,17 +14,17 @@
 class EncodedNumber {
    public:
     
-    EncodedNumber(PaillierPublicKey* public_key, long encoding, long exponent);
+    EncodedNumber(PaillierPublicKey* public_key, mpz_class encoding, long exponent);
     static EncodedNumber encode(PaillierPublicKey* public_key, long scalar,
                                 float precision = 0,
                                 long max_exponent = 0);
     static EncodedNumber encode(PaillierPublicKey* public_key, float scalar,
                                 float precision = 0,
                                 long max_exponent = 0);
-    long decode();
+    mpz_class decode();
     EncodedNumber decrease_exponent_to(long new_exp);
     PaillierPublicKey* public_key;
-    long encoding;
+    mpz_class encoding;
     long exponent;
 };
 

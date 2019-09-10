@@ -12,7 +12,7 @@ class PaillierPublicKey {
     PaillierPublicKey(long n);
     bool operator==(const PaillierPublicKey& other);
     long get_random_lt_n();
-    long raw_encrypt(long plaintext, long r_value = 0);
+    mpz_class raw_encrypt(mpz_class plaintext, long r_value = 0);
     
     EncryptedNumber encrypt(EncodedNumber value, float precision = 0, long r_value = 0);
     EncryptedNumber encrypt(long value, float precision = 0, long r_value = 0);

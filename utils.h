@@ -6,18 +6,18 @@
 #define __utils__
 
 typedef struct {
-    long r;
-    long s;
-    long t;
+    mpz_class r;
+    mpz_class s;
+    mpz_class t;
 } ext_gcd;
 
 typedef struct {
     PaillierPublicKey pub_key;
 } keypair;
 
-unsigned long powmod(unsigned long base, unsigned long exp, unsigned long p);
-ext_gcd egcd(long a, long b);
-long invert(long a, long b);
+mpz_class powmod(mpz_class base, mpz_class exp, mpz_class p);
+ext_gcd egcd(mpz_class a, mpz_class b);
+mpz_class invert(mpz_class a, mpz_class b);
 bool miller_rabin(long n, long k);
 bool is_prime(long n, long mr_rounds = 25);
 long getprimeover(long N);

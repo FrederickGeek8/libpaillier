@@ -1,7 +1,6 @@
 #include <iostream>
 #include <float.h>
 #include <math.h>
-#include <gmpxx.h>
 
 class PaillierPublicKey;
 class EncryptedNumber;
@@ -13,4 +12,6 @@ class EncodedNumber;
 #include "encoded_number.h"
 #include "encrypted_number.h"
 #include "utils.h"
+#include "gmpfrxx.h"
+#include "mpfr_mul_d.h"
 #endif

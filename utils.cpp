@@ -2,9 +2,9 @@
 
 // TODO: Migrate to GMP
 
-unsigned long powmod(unsigned long base, unsigned long exp, unsigned long p) {
+mpz_class powmod(mpz_class base, mpz_class exp, mpz_class p) {
     base %= p;
-    unsigned long result = 1;
+    mpz_class result = 1;
     while (exp > 0) {
         if (exp & 1) result = (result * base) % p;
         base = (base * base) % p;
@@ -15,19 +15,19 @@ unsigned long powmod(unsigned long base, unsigned long exp, unsigned long p) {
     return result;
 }
 
-ext_gcd egcd(long a, long b) {
+ext_gcd egcd(mpz_class a, mpz_class b) {
     if (a == 0) {
         ext_gcd ret = {b, 0, 1};
         return ret;
     }
 
-    ext_gcd res = egcd(b % a, a);
+    ext_gcd res = egcd((mpz_class) b % a, a);
     ext_gcd ret = {res.r, (res.t - (b / a) * res.s), res.s};
 
     return ret;
 }
 
-long invert(long a, long b) {
+mpz_class invert(mpz_class a, mpz_class b) {
     ext_gcd res = egcd(a, b);
     if (res.r != 1) {
         throw std::runtime_error(std::string("No inverse exists."));
