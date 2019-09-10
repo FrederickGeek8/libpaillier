@@ -11,7 +11,7 @@ EncodedNumber EncodedNumber::encode(PaillierPublicKey* public_key, long scalar,
                             float precision, long max_exponent) {
     long prec_exponent = 0;
     if (precision != 0) {
-        prec_exponent = (int)floorf(logb(precision, BASE));
+        prec_exponent = (long)floorf(logb(precision, BASE));
     }
 
     long exponent = prec_exponent;
@@ -20,7 +20,7 @@ EncodedNumber EncodedNumber::encode(PaillierPublicKey* public_key, long scalar,
     }
 
     long int_rep = roundf(scalar * pow(BASE, -exponent));
-    if (abs(int_rep) > public_key->n) {
+    if (abs(int_rep) > public_key->max_int) {
         throw std::runtime_error(std::string("Integer must be within +/- public key max int."));
     }
 
@@ -47,7 +47,7 @@ EncodedNumber EncodedNumber::encode(PaillierPublicKey* public_key, float scalar,
     }
 
     long int_rep = roundf(scalar * pow(BASE, -exponent));
-    if (abs(int_rep) > public_key->n) {
+    if (abs(int_rep) > public_key->max_int) {
         throw std::runtime_error(std::string("Integer must be within +/- public key max int."));
     }
 

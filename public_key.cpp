@@ -29,6 +29,7 @@ long PaillierPublicKey::raw_encrypt(long plaintext, long r_value) {
     }
 
     long obfuscator = powmod(r, this->n, this->nsquare);
+    printf("r: %lu, o: %lu, n: %lu, n2: %lu\n", r, obfuscator, this->n, this->nsquare);
 
     return (nude_ciphertext * obfuscator) % this->nsquare;
 }
@@ -59,6 +60,7 @@ EncryptedNumber PaillierPublicKey::encrypt_encoded(EncodedNumber encoding, long 
 
     long ciphertext = this->raw_encrypt(encoding.encoding, obfuscator);
     EncryptedNumber encrypted_number = EncryptedNumber(this, ciphertext, encoding.encoding);
+
     if (r_value == 0) {
         encrypted_number.obfuscate();
     }

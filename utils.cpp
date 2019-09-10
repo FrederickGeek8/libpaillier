@@ -9,6 +9,7 @@ unsigned long powmod(unsigned long base, unsigned long exp, unsigned long p) {
         if (exp & 1) result = (result * base) % p;
         base = (base * base) % p;
         exp >>= 1;
+        printf("re:%lu\n", result);
     }
 
     return result;
