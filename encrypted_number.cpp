@@ -1,7 +1,7 @@
 #include "encrypted_number.h"
 
 EncryptedNumber::EncryptedNumber(PaillierPublicKey* public_key,
-                                 mpz_class ciphertext, mpz_class exponent) {
+                                 mpz_class ciphertext, long exponent) {
     this->public_key = public_key;
     this->_ciphertext = ciphertext;
     this->exponent = exponent;
@@ -75,7 +75,7 @@ EncryptedNumber EncryptedNumber::decrease_exponent_to(long new_exp) {
 void EncryptedNumber::obfuscate() {
     mpz_class r = this->public_key->get_random_lt_n();
     mpz_class r_pow_n;
-    mpz_powm(r_pow_n.get_mpz_t(), r, this->public_key->n.get_mpz_t(),
+    mpz_powm(r_pow_n.get_mpz_t(), r.get_mpz_t(), this->public_key->n.get_mpz_t(),
              this->public_key->nsquare.get_mpz_t());
     this->_ciphertext = this->_ciphertext * r_pow_n % this->public_key->nsquare;
     this->_is_obfuscated = true;
@@ -95,7 +95,8 @@ EncryptedNumber EncryptedNumber::_add_encoded(EncodedNumber& encoded) {
         b = b.decrease_exponent_to(a.exponent);
     }
 
-    long encrypted_scalar = a.public_key->raw_encrypt(b.encoding, 1);
+    mpz_class mpz_encrypted_scalar = a.public_key->raw_encrypt(b.encoding, 1);
+    long encrypted_scalar = mpz_get_si(mpz_encrypted_scalar.get_mpz_t());
     mpz_class sum_ciphertext =
         a._raw_add(a.ciphertext(false), encrypted_scalar);
 

@@ -23,6 +23,6 @@ class PaillierPrivateKey {
         long l_function(long x, long p);
         long crt(long mp, long mq);
         
-}
+};
 
 #endif

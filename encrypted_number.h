@@ -6,7 +6,7 @@
 class EncryptedNumber {
    public:
     
-    EncryptedNumber(PaillierPublicKey* public_key, mpz_class ciphertext, mpz_class exponent = 0);
+    EncryptedNumber(PaillierPublicKey* public_key, mpz_class ciphertext, long exponent = 0);
 
     EncryptedNumber operator+(EncryptedNumber& other);
     EncryptedNumber operator+(EncodedNumber& other);

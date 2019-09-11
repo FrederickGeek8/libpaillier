@@ -24,7 +24,10 @@ EncodedNumber EncodedNumber::encode(PaillierPublicKey* public_key, long scalar,
         throw std::runtime_error(std::string("Integer must be within +/- public key max int."));
     }
 
-    return EncodedNumber(public_key, int_rep % public_key->n, exponent);
+    mpz_class int_rep_out = int_rep % public_key->n;
+    long int_rep_o = mpz_get_si(int_rep_out.get_mpz_t());
+
+    return EncodedNumber(public_key, int_rep_o, exponent);
 }
 
 EncodedNumber EncodedNumber::encode(PaillierPublicKey* public_key, float scalar,
@@ -51,10 +54,14 @@ EncodedNumber EncodedNumber::encode(PaillierPublicKey* public_key, float scalar,
         throw std::runtime_error(std::string("Integer must be within +/- public key max int."));
     }
 
-    return EncodedNumber(public_key, int_rep % public_key->n, exponent);
+    mpz_class int_rep_out = int_rep % public_key->n;
+    long int_rep_o = mpz_get_si(int_rep_out.get_mpz_t());
+
+    return EncodedNumber(public_key, int_rep_o, exponent);
 }
 
-mpz_class EncodedNumber::decode() {
+// float (mpfr) by default?
+float EncodedNumber::decode() {
     mpz_class mantissa = 0;
     if (this->encoding >= this->public_key->n) {
         throw std::runtime_error(std::string("Attempted to decode corrupted number."));
@@ -65,8 +72,8 @@ mpz_class EncodedNumber::decode() {
     } else {
         throw std::runtime_error(std::string("Overflow detected in decrypted number."));
     }
-
-    return mantissa * pow(BASE, this->exponent);
+    mpfr_class output = mantissa * pow(BASE, this->exponent);
+    return mpfr_get_flt(output.get_mpfr_t(), MPFR_RNDD);
 }
 
 EncodedNumber EncodedNumber::decrease_exponent_to(long new_exp) {
@@ -76,8 +83,9 @@ EncodedNumber EncodedNumber::decrease_exponent_to(long new_exp) {
 
     long factor = pow(BASE, this->exponent - new_exp);
     mpz_class new_enc = this->encoding * factor % this->public_key->n;
+    long n_enc = mpz_get_si(new_enc.get_mpz_t());
 
-    return EncodedNumber(this->public_key, new_enc, new_exp);
+    return EncodedNumber(this->public_key, n_enc, new_exp);
 }
 
 float logb(float x, long base) { return log(x) / log(base); }

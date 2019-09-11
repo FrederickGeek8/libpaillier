@@ -21,7 +21,7 @@ class EncodedNumber {
     static EncodedNumber encode(PaillierPublicKey* public_key, float scalar,
                                 float precision = 0,
                                 long max_exponent = 0);
-    mpz_class decode();
+    float decode();
     EncodedNumber decrease_exponent_to(long new_exp);
     PaillierPublicKey* public_key;
     long encoding;
