@@ -11,7 +11,7 @@ bool PaillierPublicKey::operator==(const PaillierPublicKey& other) {
     return this->n == other.n;
 }
 
-mpz_class PaillierPublicKey::raw_encrypt(mpz_class plaintext, long r_value) {
+mpz_class PaillierPublicKey::raw_encrypt(mpz_class plaintext, mpz_class r_value) {
     mpz_class nude_ciphertext;
     if (this->n - this->max_int <= plaintext && plaintext < this->n) {
         mpz_class neg_plaintext = this->n - plaintext;
@@ -21,20 +21,22 @@ mpz_class PaillierPublicKey::raw_encrypt(mpz_class plaintext, long r_value) {
         nude_ciphertext = (this->n * plaintext + 1) % this->nsquare;
     }
 
-    long r;
+    mpz_class r;
     if (r_value == 0) {
         r = this->get_random_lt_n(); 
     } else {
         r = r_value;
     }
 
-    mpz_class obfuscator = powmod(r, this->n, this->nsquare);
-    printf("r: %lu, o: %lu, n: %lu, n2: %lu\n", r, obfuscator, this->n, this->nsquare);
+    mpz_class obfuscator;
+    mpz_powm(obfuscator.get_mpz_t(), r.get_mpz_t(), this->n.get_mpz_t(), this->nsquare.get_mpz_t());
+
+    // printf("r: %lu, o: %lu, n: %lu, n2: %lu\n", r, obfuscator, this->n, this->nsquare);
 
     return (nude_ciphertext * obfuscator) % this->nsquare;
 }
 
-long PaillierPublicKey::get_random_lt_n() {
+mpz_class PaillierPublicKey::get_random_lt_n() {
     return rand() % this->n + 1;
 }
 

@@ -1,6 +1,6 @@
 #include "encoded_number.h"
 
-EncodedNumber::EncodedNumber(PaillierPublicKey* public_key, mpz_class encoding,
+EncodedNumber::EncodedNumber(PaillierPublicKey* public_key, long encoding,
                              long exponent) {
     this->public_key = public_key;
     this->encoding = encoding;

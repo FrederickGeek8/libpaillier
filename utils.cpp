@@ -1,7 +1,7 @@
 #include "utils.h"
 
 // TODO: Migrate to GMP
-
+/*
 mpz_class powmod(mpz_class base, mpz_class exp, mpz_class p) {
     base %= p;
     mpz_class result = 1;
@@ -14,7 +14,7 @@ mpz_class powmod(mpz_class base, mpz_class exp, mpz_class p) {
 
     return result;
 }
-
+*/
 ext_gcd egcd(mpz_class a, mpz_class b) {
     if (a == 0) {
         ext_gcd ret = {b, 0, 1};
@@ -35,7 +35,7 @@ mpz_class invert(mpz_class a, mpz_class b) {
 
     return res.s % b;
 }
-
+/*
 bool miller_rabin(long n, long k) {
     if (n <= 3) {
         throw std::runtime_error(std::string("Number too low."));
@@ -80,7 +80,7 @@ bool miller_rabin(long n, long k) {
 
     return true;
 }
-
+*/
 long getprimeover(long N) {
     unsigned long min = pow(2, N - 1);
     unsigned long max = pow(2, N) - min + 1;

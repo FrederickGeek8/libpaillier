@@ -1,7 +1,7 @@
 #include "encrypted_number.h"
 
-EncryptedNumber::EncryptedNumber(PaillierPublicKey* public_key, mpz_class ciphertext,
-                                 long exponent) {
+EncryptedNumber::EncryptedNumber(PaillierPublicKey* public_key,
+                                 mpz_class ciphertext, mpz_class exponent) {
     this->public_key = public_key;
     this->_ciphertext = ciphertext;
     this->exponent = exponent;
@@ -61,7 +61,8 @@ mpz_class EncryptedNumber::ciphertext(bool be_secure) {
 
 EncryptedNumber EncryptedNumber::decrease_exponent_to(long new_exp) {
     if (new_exp > this->exponent) {
-        throw std::runtime_error(std::string("New exponent should be smaller than old exponent."));
+        throw std::runtime_error(
+            std::string("New exponent should be smaller than old exponent."));
     }
 
     EncryptedNumber multiplied =
@@ -72,15 +73,18 @@ EncryptedNumber EncryptedNumber::decrease_exponent_to(long new_exp) {
 }
 
 void EncryptedNumber::obfuscate() {
-    long r = this->public_key->get_random_lt_n();
-    mpz_class r_pow_n = powmod(r, this->public_key->n, this->public_key->nsquare);
+    mpz_class r = this->public_key->get_random_lt_n();
+    mpz_class r_pow_n;
+    mpz_powm(r_pow_n.get_mpz_t(), r, this->public_key->n.get_mpz_t(),
+             this->public_key->nsquare.get_mpz_t());
     this->_ciphertext = this->_ciphertext * r_pow_n % this->public_key->nsquare;
     this->_is_obfuscated = true;
 }
 
 EncryptedNumber EncryptedNumber::_add_encoded(EncodedNumber& encoded) {
     if (this->public_key != encoded.public_key) {
-        throw std::runtime_error(std::string("Attempted to add numbers encoded against different public keys."));
+        throw std::runtime_error(std::string(
+            "Attempted to add numbers encoded against different public keys."));
     }
 
     EncryptedNumber a = *this;
@@ -92,14 +96,16 @@ EncryptedNumber EncryptedNumber::_add_encoded(EncodedNumber& encoded) {
     }
 
     long encrypted_scalar = a.public_key->raw_encrypt(b.encoding, 1);
-    mpz_class sum_ciphertext = a._raw_add(a.ciphertext(false), encrypted_scalar);
+    mpz_class sum_ciphertext =
+        a._raw_add(a.ciphertext(false), encrypted_scalar);
 
     return EncryptedNumber(a.public_key, sum_ciphertext, a.exponent);
 }
 
 EncryptedNumber EncryptedNumber::_add_encrypted(EncryptedNumber& other) {
     if (this->public_key != other.public_key) {
-        throw std::runtime_error(std::string("Attempted to add numbers encoded against different public keys."));
+        throw std::runtime_error(std::string(
+            "Attempted to add numbers encoded against different public keys."));
     }
 
     EncryptedNumber a = *this;
@@ -110,17 +116,20 @@ EncryptedNumber EncryptedNumber::_add_encrypted(EncryptedNumber& other) {
         b = b.decrease_exponent_to(a.exponent);
     }
 
-    mpz_class sum_ciphertext = a._raw_add(a.ciphertext(false), b.ciphertext(false));
+    mpz_class sum_ciphertext =
+        a._raw_add(a.ciphertext(false), b.ciphertext(false));
 
     return EncryptedNumber(a.public_key, sum_ciphertext, a.exponent);
 }
 
 EncryptedNumber EncryptedNumber::_add_scalar(long scalar) {
-    EncodedNumber encoded = EncodedNumber::encode(this->public_key, scalar, this->exponent);
+    EncodedNumber encoded =
+        EncodedNumber::encode(this->public_key, scalar, this->exponent);
     return this->_add_encoded(encoded);
 }
 EncryptedNumber EncryptedNumber::_add_scalar(float scalar) {
-    EncodedNumber encoded = EncodedNumber::encode(this->public_key, scalar, this->exponent);
+    EncodedNumber encoded =
+        EncodedNumber::encode(this->public_key, scalar, this->exponent);
     return this->_add_encoded(encoded);
 }
 
@@ -134,10 +143,17 @@ mpz_class EncryptedNumber::_raw_mult(mpz_class plaintext) {
     }
 
     if (this->public_key->n - this->public_key->max_int <= plaintext) {
-        mpz_class neg_c = invert(this->ciphertext(false), this->public_key->nsquare);
+        mpz_class neg_c =
+            invert(this->ciphertext(false), this->public_key->nsquare);
         mpz_class neg_scalar = this->public_key->n - plaintext;
-        return powmod(neg_c, neg_scalar, this->public_key->nsquare);
+        mpz_class ret;
+        mpz_powm(ret.get_mpz_t(), neg_c.get_mpz_t(), neg_scalar.get_mpz_t(),
+                 this->public_key->nsquare.get_mpz_t());
+        return ret;
     }
 
-    return powmod(this->ciphertext(false), plaintext, this->public_key->nsquare);
+    mpz_class ret;
+    mpz_powm(ret.get_mpz_t(), this->ciphertext(false).get_mpz_t(),
+             plaintext.get_mpz_t(), this->public_key->nsquare.get_mpz_t());
+    return ret;
 }

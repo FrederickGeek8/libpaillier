@@ -15,7 +15,7 @@ typedef struct {
     PaillierPublicKey pub_key;
 } keypair;
 
-mpz_class powmod(mpz_class base, mpz_class exp, mpz_class p);
+// mpz_class powmod(mpz_class base, mpz_class exp, mpz_class p);
 ext_gcd egcd(mpz_class a, mpz_class b);
 mpz_class invert(mpz_class a, mpz_class b);
 bool miller_rabin(long n, long k);

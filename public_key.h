@@ -5,14 +5,14 @@
 
 class PaillierPublicKey {
    public:
-    long max_int;
-    long n;
-    long nsquare;
-    long g;
+    mpz_class max_int;
+    mpz_class n;
+    mpz_class nsquare;
+    mpz_class g;
     PaillierPublicKey(long n);
     bool operator==(const PaillierPublicKey& other);
-    long get_random_lt_n();
-    mpz_class raw_encrypt(mpz_class plaintext, long r_value = 0);
+    mpz_class get_random_lt_n();
+    mpz_class raw_encrypt(mpz_class plaintext, mpz_class r_value = 0);
     
     EncryptedNumber encrypt(EncodedNumber value, float precision = 0, long r_value = 0);
     EncryptedNumber encrypt(long value, float precision = 0, long r_value = 0);
