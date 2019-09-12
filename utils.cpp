@@ -81,18 +81,24 @@ bool miller_rabin(long n, long k) {
     return true;
 }
 */
-long getprimeover(long N) {
-    unsigned long min = pow(2, N - 1);
-    unsigned long max = pow(2, N) - min + 1;
-    unsigned long n = (rand() % max + min) | 1;
-    while (!is_prime(n)) {
-        n += 2;
-    }
+mpz_class getprimeover(long N) {
+    gmp_randstate_t state;
+    gmp_randinit_mt(state);
+    gmp_randseed_ui(state, rand());
+
+    mpz_class rand;
+    mpz_class min;
+    mpz_class n;
+    mpz_urandomb(rand.get_mpz_t(), state, N + 1);
+    mpz_ui_pow_ui(min.get_mpz_t(), 2, N);
+    rand += min;
+    mpz_nextprime(n.get_mpz_t(), rand.get_mpz_t());
+   
     return n;
 }
 
 keypair generate_paillier_keypair(long n_length) {
-    long p = 0, q = 0, n = 0;
+    mpz_class p = 0, q = 0, n = 0;
     long n_len = 0;
     while (n_len != n_length) {
         p = getprimeover(n_length / 2);
@@ -101,7 +107,15 @@ keypair generate_paillier_keypair(long n_length) {
             q = getprimeover(n_length / 2);
         }
         n = p * q;
-        n_len = floor(log2(n)) + 1;
+
+        mpfr_class f_n;
+        mpfr_class new_n;
+        mpz_class floored;
+        mpfr_set_z(f_n.get_mpfr_t(), n.get_mpz_t(), MPFR_RNDD);
+        mpfr_log2(new_n.get_mpfr_t(), f_n.get_mpfr_t(), MPFR_RNDD);
+        mpfr_floor(new_n.get_mpfr_t(), new_n.get_mpfr_t());
+        mpfr_get_z(floored.get_mpz_t(), new_n.get_mpfr_t(), MPFR_RNDD);
+        n_len = mpz_get_ui(floored.get_mpz_t()) + 1;
     }
 
     PaillierPublicKey public_key = PaillierPublicKey(n);

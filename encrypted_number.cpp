@@ -95,8 +95,7 @@ EncryptedNumber EncryptedNumber::_add_encoded(EncodedNumber& encoded) {
         b = b.decrease_exponent_to(a.exponent);
     }
 
-    mpz_class mpz_encrypted_scalar = a.public_key->raw_encrypt(b.encoding, 1);
-    long encrypted_scalar = mpz_get_si(mpz_encrypted_scalar.get_mpz_t());
+    mpz_class encrypted_scalar = a.public_key->raw_encrypt(b.encoding, 1);
     mpz_class sum_ciphertext =
         a._raw_add(a.ciphertext(false), encrypted_scalar);
 

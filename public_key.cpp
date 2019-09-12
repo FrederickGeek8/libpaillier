@@ -1,6 +1,6 @@
 #include "public_key.h"
 
-PaillierPublicKey::PaillierPublicKey(long n) {
+PaillierPublicKey::PaillierPublicKey(mpz_class n) {
     this->g = n + 1;
     this->n = n;
     this->nsquare = n * n;

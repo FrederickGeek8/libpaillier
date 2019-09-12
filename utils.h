@@ -20,7 +20,7 @@ ext_gcd egcd(mpz_class a, mpz_class b);
 mpz_class invert(mpz_class a, mpz_class b);
 bool miller_rabin(long n, long k);
 bool is_prime(long n, long mr_rounds = 25);
-long getprimeover(long N);
+mpz_class getprimeover(long N);
 keypair generate_paillier_keypair(long n_length);
 
 #endif
