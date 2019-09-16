@@ -1,4 +1,4 @@
-LIBS   = -L./lib -L. -lgmpfrxx -lpaillier -lmpfr -lgmp -lm
+LIBS   = -L./lib -L. -lgmpfrxx -lpaillier -lmpfr -lgmpxx -lgmp -lm
 
 
 CC=g++ -g -Wall
