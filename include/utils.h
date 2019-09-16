@@ -12,8 +12,8 @@ typedef struct {
 } ext_gcd;
 
 typedef struct {
-    PaillierPublicKey pub_key;
-    PaillierPrivateKey priv_key;
+    PaillierPublicKey* pub_key;
+    PaillierPrivateKey* priv_key;
 } keypair;
 
 // mpz_class powmod(mpz_class base, mpz_class exp, mpz_class p);

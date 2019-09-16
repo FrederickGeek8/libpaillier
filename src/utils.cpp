@@ -120,8 +120,8 @@ keypair generate_paillier_keypair(long n_length) {
         printf("%lu\n", n_len);
     }
 
-    PaillierPublicKey public_key = PaillierPublicKey(n);
-    PaillierPrivateKey private_key = PaillierPrivateKey(&public_key, p, q);
+    PaillierPublicKey* public_key = new PaillierPublicKey(n);
+    PaillierPrivateKey* private_key = new PaillierPrivateKey(public_key, p, q);
 
     keypair m_keypair = {public_key, private_key};
     return m_keypair;
