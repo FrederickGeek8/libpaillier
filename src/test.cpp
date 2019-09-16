@@ -5,18 +5,20 @@ using namespace std;
 
 int main() {
     srand(time(0));
-    // keypair keys = generate_paillier_keypair(32);
-    mpz_class plainz = 5;
-    float test = 2.0;
-    mpfr_class output = 5 * test;
-    cout << "This is " << output << endl;
-    mpfr_class plainf = 5.12;
-    cout << "This is " << mpfr_get_flt(output.get_mpfr_t(), MPFR_RNDD) << endl;
-    // EncryptedNumber test = keys.pub_key.encrypt(plaintext);
+    keypair keys = generate_paillier_keypair(32);
+    
+    long plaintext = 5;
 
+    EncryptedNumber test = keys.pub_key.encrypt(plaintext);
+
+    float decrypt = keys.priv_key.decrypt(test);
     // int prime = getprimeover(16);
     // bool miller = miller_rabin(19785041, 25);
-    // printf("%lu\n%lu\n%lu", test.ciphertext(), keys.pub_key.n, keys.pub_key.max_int);
+    cout << test.ciphertext() << endl;
+    cout << keys.pub_key.n << endl;
+    cout << keys.pub_key.max_int << endl;
+    cout << decrypt << endl;
+    
     // printf("%d, %d", getprimeover(16), getprimeover(16));
     // keypair keys = generate_paillier_keypair(32);
 

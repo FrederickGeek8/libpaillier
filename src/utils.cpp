@@ -14,7 +14,7 @@ mpz_class powmod(mpz_class base, mpz_class exp, mpz_class p) {
 
     return result;
 }
-*/
+
 ext_gcd egcd(mpz_class a, mpz_class b) {
     if (a == 0) {
         ext_gcd ret = {b, 0, 1};
@@ -35,7 +35,7 @@ mpz_class invert(mpz_class a, mpz_class b) {
 
     return res.s % b;
 }
-/*
+
 bool miller_rabin(long n, long k) {
     if (n <= 3) {
         throw std::runtime_error(std::string("Number too low."));
@@ -100,7 +100,8 @@ mpz_class getprimeover(long N) {
 keypair generate_paillier_keypair(long n_length) {
     mpz_class p = 0, q = 0, n = 0;
     long n_len = 0;
-    while (n_len != n_length) {
+    // In PHE this is equality but I'm not sure why
+    while (n_len <= n_length) {
         p = getprimeover(n_length / 2);
         q = p;
         while (q == p) {
@@ -116,14 +117,16 @@ keypair generate_paillier_keypair(long n_length) {
         mpfr_floor(new_n.get_mpfr_t(), new_n.get_mpfr_t());
         mpfr_get_z(floored.get_mpz_t(), new_n.get_mpfr_t(), MPFR_RNDD);
         n_len = mpz_get_ui(floored.get_mpz_t()) + 1;
+        printf("%lu\n", n_len);
     }
 
     PaillierPublicKey public_key = PaillierPublicKey(n);
+    PaillierPrivateKey private_key = PaillierPrivateKey(&public_key, p, q);
 
-    keypair m_keypair = {public_key};
+    keypair m_keypair = {public_key, private_key};
     return m_keypair;
 }
-
+/*
 long first_primes[] = {
     2,     3,     5,     7,     11,    13,    17,    19,    23,    29,    31,
     37,    41,    43,    47,    53,    59,    61,    67,    71,    73,    79,
@@ -334,3 +337,4 @@ bool is_prime(long n, long mr_rounds) {
 
     return miller_rabin(n, mr_rounds);
 }
+*/

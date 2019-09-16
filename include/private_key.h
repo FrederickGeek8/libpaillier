@@ -5,23 +5,23 @@
 
 class PaillierPrivateKey {
     public:
-        PaillierPrivateKey(PaillierPublicKey* public_key, long p, long q);
+        PaillierPrivateKey(PaillierPublicKey* public_key, mpz_class p, mpz_class q);
         PaillierPublicKey* public_key;
-        long p;
-        long q;
-        long psquare;
-        long qsquare;
-        long p_inverse;
-        long hp;
-        long hq;
+        mpz_class p;
+        mpz_class q;
+        mpz_class psquare;
+        mpz_class qsquare;
+        mpz_class p_inverse;
+        mpz_class hp;
+        mpz_class hq;
 
-        static PaillierPrivateKey from_totient(PaillierPublicKey* public_key, long totient);
+        static PaillierPrivateKey from_totient(PaillierPublicKey* public_key, mpz_class totient);
         float decrypt(EncryptedNumber& encrypted_number);
-        float decrypt_encoded(EncryptedNumber& encrypted_number);
-        long raw_decrypt(long ciphertext);
-        long h_function(long x, long x_square);
-        long l_function(long x, long p);
-        long crt(long mp, long mq);
+        EncodedNumber decrypt_encoded(EncryptedNumber& encrypted_number);
+        long raw_decrypt(mpz_class ciphertext);
+        mpz_class h_function(mpz_class x, mpz_class x_square);
+        mpz_class l_function(mpz_class x, mpz_class p);
+        long crt(mpz_class mp, mpz_class mq);
         
 };
 

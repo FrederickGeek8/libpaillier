@@ -7,8 +7,8 @@ PaillierPublicKey::PaillierPublicKey(mpz_class n) {
     this->max_int = n / 3 - 1;
 }
 
-bool PaillierPublicKey::operator==(const PaillierPublicKey& other) {
-    return this->n == other.n;
+bool PaillierPublicKey::operator==(const PaillierPublicKey* other) {
+    return this->n == other->n;
 }
 
 mpz_class PaillierPublicKey::raw_encrypt(mpz_class plaintext, mpz_class r_value) {
@@ -16,7 +16,7 @@ mpz_class PaillierPublicKey::raw_encrypt(mpz_class plaintext, mpz_class r_value)
     if (this->n - this->max_int <= plaintext && plaintext < this->n) {
         mpz_class neg_plaintext = this->n - plaintext;
         mpz_class neg_ciphertext = (this->n * neg_plaintext + 1) % this->nsquare;
-        nude_ciphertext = invert(neg_ciphertext, this->nsquare);
+        mpz_invert(nude_ciphertext.get_mpz_t(), neg_ciphertext.get_mpz_t(), this->nsquare.get_mpz_t());
     } else {
         nude_ciphertext = (this->n * plaintext + 1) % this->nsquare;
     }

@@ -143,8 +143,8 @@ mpz_class EncryptedNumber::_raw_mult(mpz_class plaintext) {
     }
 
     if (this->public_key->n - this->public_key->max_int <= plaintext) {
-        mpz_class neg_c =
-            invert(this->ciphertext(false), this->public_key->nsquare);
+        mpz_class neg_c;
+        mpz_invert(neg_c.get_mpz_t(), this->ciphertext(false).get_mpz_t(), this->public_key->nsquare.get_mpz_t());
         mpz_class neg_scalar = this->public_key->n - plaintext;
         mpz_class ret;
         mpz_powm(ret.get_mpz_t(), neg_c.get_mpz_t(), neg_scalar.get_mpz_t(),

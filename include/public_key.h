@@ -10,7 +10,7 @@ class PaillierPublicKey {
     mpz_class nsquare;
     mpz_class g;
     PaillierPublicKey(mpz_class n);
-    bool operator==(const PaillierPublicKey& other);
+    bool operator==(const PaillierPublicKey* other);
     mpz_class get_random_lt_n();
     mpz_class raw_encrypt(mpz_class plaintext, mpz_class r_value = 0);
     
