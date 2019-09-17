@@ -48,8 +48,7 @@ float PaillierPrivateKey::decrypt(EncryptedNumber& encrypted_number) {
 
 EncodedNumber PaillierPrivateKey::decrypt_encoded(
     EncryptedNumber& encrypted_number) {
-    std::cout << this->public_key->n << std::endl;
-    // std::cout << encrypted_number.public_key->n << std::endl;
+
     if (this->public_key != encrypted_number.public_key) {
         throw std::runtime_error(std::string(
             "Encrypted number was encrypted against a different key!"));

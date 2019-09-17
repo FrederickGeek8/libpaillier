@@ -50,6 +50,7 @@ EncodedNumber EncodedNumber::encode(PaillierPublicKey* public_key, float scalar,
     }
 
     long int_rep = roundf(scalar * pow(BASE, -exponent));
+    // printf("%ld, %f, %ld\n", int_rep, scalar, exponent);
     if (abs(int_rep) > public_key->max_int) {
         throw std::runtime_error(std::string("Integer must be within +/- public key max int."));
     }
@@ -72,7 +73,9 @@ float EncodedNumber::decode() {
     } else {
         throw std::runtime_error(std::string("Overflow detected in decrypted number."));
     }
-    mpfr_class output = mantissa * pow(BASE, this->exponent);
+    mpfr_class out;
+    mpfr_ui_pow_ui(out.get_mpfr_t(), BASE, this->exponent, MPFR_RNDD);
+    mpfr_class output = mantissa * out;
     return mpfr_get_flt(output.get_mpfr_t(), MPFR_RNDD);
 }
 
