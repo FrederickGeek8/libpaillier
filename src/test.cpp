@@ -10,6 +10,11 @@ int main() {
     long plaintext = 5;
     float plaintext2 = 5.2;
 
+
+    // EncodedNumber ftest = EncodedNumber::encode(keys.pub_key, plaintext2);
+    // float decoded = ftest.decode();
+    // cout << "This is " << decoded << endl;
+
     EncryptedNumber test = keys.pub_key->encrypt(plaintext);
     EncryptedNumber test2 = keys.pub_key->encrypt(plaintext2);
 

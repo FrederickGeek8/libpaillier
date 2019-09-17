@@ -117,7 +117,6 @@ keypair generate_paillier_keypair(long n_length) {
         mpfr_floor(new_n.get_mpfr_t(), new_n.get_mpfr_t());
         mpfr_get_z(floored.get_mpz_t(), new_n.get_mpfr_t(), MPFR_RNDD);
         n_len = mpz_get_ui(floored.get_mpz_t()) + 1;
-        printf("%lu\n", n_len);
     }
 
     PaillierPublicKey* public_key = new PaillierPublicKey(n);

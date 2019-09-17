@@ -73,8 +73,9 @@ float EncodedNumber::decode() {
     } else {
         throw std::runtime_error(std::string("Overflow detected in decrypted number."));
     }
+    mpfr_class base = BASE;
     mpfr_class out;
-    mpfr_ui_pow_ui(out.get_mpfr_t(), BASE, this->exponent, MPFR_RNDD);
+    mpfr_pow_si(out.get_mpfr_t(), base.get_mpfr_t(), this->exponent, MPFR_RNDD);
     mpfr_class output = mantissa * out;
     return mpfr_get_flt(output.get_mpfr_t(), MPFR_RNDD);
 }
