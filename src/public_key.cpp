@@ -61,7 +61,7 @@ EncryptedNumber PaillierPublicKey::encrypt_encoded(EncodedNumber encoding, long 
     }
 
     mpz_class ciphertext = this->raw_encrypt(encoding.encoding, obfuscator);
-    EncryptedNumber encrypted_number = EncryptedNumber(this, ciphertext, encoding.encoding);
+    EncryptedNumber encrypted_number = EncryptedNumber(this, ciphertext, encoding.exponent);
 
     if (r_value == 0) {
         encrypted_number.obfuscate();
