@@ -1,7 +1,7 @@
 LIBS   = -L./lib -L. -lgmpfrxx -lpaillier -lmpfr -lgmpxx -lgmp -lm
 
 
-CC=g++ -g -Wall
+CC=g++ -g -Wall -std=c++11
 BIN=bin
 INC=include
 LIB=lib
@@ -9,9 +9,14 @@ OBJ=obj
 SRC=src
 
 
-all: ${LIB}/libpaillier.a ${BIN}/test
+all: ${LIB}/libpaillier.a ${BIN}/test test
 
 lib: ${LIB}/libpaillier.a
+
+test: ${BIN}/unit_test runtest
+
+runtest:
+	${BIN}/unit_test
 
 ${LIB}/libpaillier.a: ${OBJ}/utils.o ${OBJ}/public_key.o ${OBJ}/private_key.o ${OBJ}/encrypted_number.o ${OBJ}/encoded_number.o
 	ar rs ${LIB}/libpaillier.a ${OBJ}/utils.o ${OBJ}/public_key.o ${OBJ}/private_key.o ${OBJ}/encrypted_number.o ${OBJ}/encoded_number.o
@@ -19,6 +24,9 @@ ${LIB}/libpaillier.a: ${OBJ}/utils.o ${OBJ}/public_key.o ${OBJ}/private_key.o ${
 
 ${BIN}/test: 
 	${CC} ${SRC}/test.cpp -o ${BIN}/test -I${INC} ${LIBS} 
+	
+${BIN}/unit_test: 
+	${CC} ${SRC}/unit_test.cpp -o ${BIN}/unit_test -I${INC} ${LIBS} 
 
 ${OBJ}/utils.o: ${INC}/utils.h ${SRC}/utils.cpp
 	${CC} -c $(CFLAGS) -o ${OBJ}/utils.o ${SRC}/utils.cpp -I${INC}
