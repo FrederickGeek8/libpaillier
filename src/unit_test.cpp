@@ -23,10 +23,35 @@ TEST_CASE("Generate prime over length", "[prime]") {
 
 TEST_CASE("Encoding / Decoding correctness", "[encoding]") {
     keypair test = generate_paillier_keypair(1024);
-    float plain = 5.12;
-    long plain2 = 10;
-    EncodedNumber num = EncodedNumber::encode(test.pub_key, plain);
-    EncodedNumber num2 = EncodedNumber::encode(test.pub_key, plain2);
-    REQUIRE(num.decode() == plain);
-    REQUIRE((int)num2.decode() == plain2);
+    SECTION("float encoding") {
+        float plain = 5.12;
+        EncodedNumber num = EncodedNumber::encode(test.pub_key, plain);
+        REQUIRE(num.decode() == plain);
+    }
+
+    SECTION("integer encoding") {
+        long plain2 = 10;
+    
+        EncodedNumber num2 = EncodedNumber::encode(test.pub_key, plain2);
+        
+        REQUIRE((int)num2.decode() == plain2);
+    }
+}
+
+TEST_CASE("Encrypting / Decrypting correctness", "[encrypt]") {
+    keypair test = generate_paillier_keypair(1024);
+    SECTION("float encryption") {
+        float plain = 5.12;
+        EncryptedNumber num = test.pub_key->encrypt(plain);
+        float decoded = test.priv_key->decrypt(num);
+        REQUIRE(plain == decoded);
+    }
+    
+    SECTION("integer encryption") {
+        long plain2 = 10;
+        EncryptedNumber num2 = test.pub_key->encrypt(plain2);
+        int decoded2 = (int)test.priv_key->decrypt(num2);
+        REQUIRE(plain2 == decoded2);
+    }
+    
 }
