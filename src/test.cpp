@@ -6,6 +6,8 @@ using namespace std;
 int main() {
     srand(time(0));
     keypair keys = generate_paillier_keypair(1024);
+    cout << keys.pub_key->n << endl;
+    cout << (keys.priv_key->p - 1) * (keys.priv_key->q - 1) << endl;
     
     long plaintext = 5;
     float plaintext2 = 5.2;
